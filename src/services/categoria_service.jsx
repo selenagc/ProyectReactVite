@@ -36,3 +36,15 @@ export const showCategoria = async (id) => {
     console.error("Error en showCategoria():", error);
   }
 };
+export const updateCategoria = async (id, nombre) => {
+  try {
+    const response = await fetch(`${API_URL}/categorias/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ nombre }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error en updateCategoria():", error);
+  }
+};
