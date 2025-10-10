@@ -24,3 +24,11 @@ export const showCategoria = async (id) => {
     const response = await fetch(`${API_URL}/categorias/${id}`, { headers });
     return await response.json();
 };
+export const updateCategoria = async (id, nombre) => {
+    const response = await fetch(`${API_URL}/categorias/${id}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ nombre }),
+    });
+    return await response.json();
+};
