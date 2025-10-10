@@ -28,3 +28,11 @@ export const createCategoria = async (nombre) => {
     console.error("Error en createCategoria():", error);
   }
 };
+export const showCategoria = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/categorias/${id}`, { headers });
+    return await response.json();
+  } catch (error) {
+    console.error("Error en showCategoria():", error);
+  }
+};
