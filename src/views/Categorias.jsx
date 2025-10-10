@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
-import { getAllCategorias, createCategoria, showCategoria,updateCategoria } from "../services/categoria_service.jsx";
+import { 
+  getAllCategorias, 
+  createCategoria, 
+  showCategoria, 
+  updateCategoria, 
+  destroyCategoria 
+} from "../services/categoria_service.jsx";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
   const [nombre, setNombre] = useState("");
-  const [detalle, setDetalle] = useState(null);
   const [editingId, setEditingId] = useState(null);
+  const [detalle, setDetalle] = useState(null);
 
   const cargarCategorias = async () => {
-    try {
-      const data = await getAllCategorias();
-      setCategorias(data);
-    } catch (error) {
-      console.error("Error al cargar categorías:", error);
-    }
+    const data = await getAllCategorias();
+    setCategorias(data);
   };
 
   useEffect(() => {
@@ -21,52 +23,59 @@ function Categorias() {
   }, []);
 
   const guardarCategoria = async () => {
-    if (nombre.trim() === "") {
-      alert("Por favor ingresa un nombre de categoría.");
+    if (!nombre.trim()) {
+      alert("Por favor, ingresa un nombre para la categoría");
       return;
     }
 
-    try {
+    if (editingId) {
+      await updateCategoria(editingId, nombre);
+      setEditingId(null);
+    } else {
       await createCategoria(nombre);
-      setNombre("");
-      cargarCategorias();
-    } catch (error) {
-      console.error("Error al crear categoría:", error);
     }
+
+    setNombre("");
+    cargarCategorias();
   };
 
-  const verDetalle = async (id) => {
-    try {
-      const data = await showCategoria(id);
-      console.log("Detalle recibido:", data);
-      setDetalle(data);
-    } catch (error) {
-      console.error("Error al obtener detalle:", error);
-    }
-  };
+
+const verDetalle = async (id) => {
+  const data = await showCategoria(id);
+  console.log("Detalle recibido:", data);
+  setDetalle(data);
+};
+
+
   const editarCategoria = (cat) => {
     setEditingId(cat.id);
     setNombre(cat.nombre);
     setDetalle(null);
   };
 
-
+  const eliminarCategoria = async (id) => {
+    if (window.confirm("¿Estás seguro de eliminar esta categoría?")) {
+      await destroyCategoria(id);
+      cargarCategorias();
+      if (detalle?.id === id) setDetalle(null);
+    }
+  };
 
   return (
     <div className="container mt-3">
-      <h2>Listado de Categorías</h2>
+      <h2>Gestión de Categorías</h2>
 
       {}
       <div className="mb-3">
-        <input
-          type="text"
-          className="form-control mb-2"
-          placeholder="Nombre de la categoría"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+        <input 
+          type="text" 
+          className="form-control mb-2" 
+          placeholder="Nombre de la categoría" 
+          value={nombre} 
+          onChange={(e) => setNombre(e.target.value)} 
         />
         <button className="btn btn-primary" onClick={guardarCategoria}>
-          Crear
+          {editingId ? "Actualizar" : "Crear"}
         </button>
       </div>
 
@@ -74,42 +83,18 @@ function Categorias() {
       {categorias.length === 0 ? (
         <p>No hay categorías registradas.</p>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Creación</th>
-              <th>Actualización</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categorias.map((cat) => (
-              <tr key={cat.id}>
-                <td>{cat.id}</td>
-                <td>{cat.nombre}</td>
-                <td>{new Date(cat.created_at).toLocaleString()}</td>
-                <td>{new Date(cat.updated_at).toLocaleString()}</td>
-                <td>
-                  <button
-                    className="btn btn-info btn-sm"
-                    onClick={() => verDetalle(cat.id)}
-                  >
-                    Ver
-                  </button>
-                  <button
-                    className="btn btn-warning btn-sm"
-                    onClick={() => editarCategoria(cat)}
-                  >
-                    Editar
-                  </button>
-
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ul className="list-group">
+          {categorias.map((cat) => (
+            <li key={cat.id} className="list-group-item d-flex justify-content-between align-items-center">
+              <span>{cat.nombre}</span>
+              <div>
+                <button className="btn btn-info btn-sm me-2" onClick={() => verDetalle(cat.id)}>Ver</button>
+                <button className="btn btn-warning btn-sm me-2" onClick={() => editarCategoria(cat)}>Editar</button>
+                <button className="btn btn-danger btn-sm" onClick={() => eliminarCategoria(cat.id)}>Eliminar</button>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
 
       {}
@@ -122,6 +107,8 @@ function Categorias() {
           <p><strong>Actualizada:</strong> {detalle.updated_at}</p>
         </div>
       )}
+
+
     </div>
   );
 }
