@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { 
   getAllCategorias, 
   createCategoria, 
@@ -39,14 +40,6 @@ function Categorias() {
     cargarCategorias();
   };
 
-
-const verDetalle = async (id) => {
-  const data = await showCategoria(id);
-  console.log("Detalle recibido:", data);
-  setDetalle(data);
-};
-
-
   const editarCategoria = (cat) => {
     setEditingId(cat.id);
     setNombre(cat.nombre);
@@ -64,8 +57,6 @@ const verDetalle = async (id) => {
   return (
     <div className="container mt-3">
       <h2>Gestión de Categorías</h2>
-
-      {}
       <div className="mb-3">
         <input 
           type="text" 
@@ -79,7 +70,6 @@ const verDetalle = async (id) => {
         </button>
       </div>
 
-      {}
       {categorias.length === 0 ? (
         <p>No hay categorías registradas.</p>
       ) : (
@@ -88,7 +78,7 @@ const verDetalle = async (id) => {
             <li key={cat.id} className="list-group-item d-flex justify-content-between align-items-center">
               <span>{cat.nombre}</span>
               <div>
-                <button className="btn btn-info btn-sm me-2" onClick={() => verDetalle(cat.id)}>Ver</button>
+                <Link to={`/categoria/${cat.id}`} className="btn btn-info btn-sm me-2">Ver</Link>
                 <button className="btn btn-warning btn-sm me-2" onClick={() => editarCategoria(cat)}>Editar</button>
                 <button className="btn btn-danger btn-sm" onClick={() => eliminarCategoria(cat.id)}>Eliminar</button>
               </div>
@@ -96,19 +86,6 @@ const verDetalle = async (id) => {
           ))}
         </ul>
       )}
-
-      {}
-      {detalle && (
-        <div className="mt-3 p-3 border">
-          <h5>Detalle de la categoría:</h5>
-          <p><strong>ID:</strong> {detalle.id}</p>
-          <p><strong>Nombre:</strong> {detalle.nombre}</p>
-          <p><strong>Creada:</strong> {detalle.created_at}</p>
-          <p><strong>Actualizada:</strong> {detalle.updated_at}</p>
-        </div>
-      )}
-
-
     </div>
   );
 }
