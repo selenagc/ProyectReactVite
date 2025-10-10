@@ -48,3 +48,14 @@ export const updateCategoria = async (id, nombre) => {
     console.error("Error en updateCategoria():", error);
   }
 };
+export const destroyCategoria = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/categorias/${id}`, {
+      method: "DELETE",
+      headers,
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error en destroyCategoria():", error);
+  }
+};
