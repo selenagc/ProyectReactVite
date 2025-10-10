@@ -11,3 +11,11 @@ export const getAllCategorias = async () => {
     const response = await fetch(`${API_URL}/categorias`, { method: "GET", headers });
     return await response.json();
 };
+export const createCategoria = async (nombre) => {
+    const response = await fetch(`${API_URL}/categorias`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ nombre }),
+    });
+    return await response.json();
+};

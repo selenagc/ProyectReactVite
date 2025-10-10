@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAllCategorias } from "../services/categoria_service.jsx";
+import { getAllCategorias, createCategoria } from "../services/categoria_service.jsx";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
+  const [nombre, setNombre] = useState("");
 
   const cargarCategorias = async () => {
     try {
@@ -17,9 +18,38 @@ function Categorias() {
     cargarCategorias();
   }, []);
 
+  const guardarCategoria = async () => {
+    if (nombre.trim() === "") {
+      alert("Por favor ingresa un nombre de categoría.");
+      return;
+    }
+
+    try {
+      await createCategoria(nombre);
+      setNombre("");
+      cargarCategorias();
+    } catch (error) {
+      console.error("Error al crear categoría:", error);
+    }
+  };
+
   return (
     <div className="container mt-3">
       <h2>Listado de Categorías</h2>
+
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control mb-2"
+          placeholder="Nombre de la categoría"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+        <button className="btn btn-primary" onClick={guardarCategoria}>
+          Crear
+        </button>
+      </div>
+
 
       {categorias.length === 0 ? (
         <p>No hay categorías registradas.</p>
