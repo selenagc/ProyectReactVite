@@ -16,3 +16,15 @@ export const getAllCategorias = async () => {
     console.error("Error en getAllCategorias():", error);
   }
 };
+export const createCategoria = async (nombre) => {
+  try {
+    const response = await fetch(`${API_URL}/categorias`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ nombre }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error en createCategoria():", error);
+  }
+};
