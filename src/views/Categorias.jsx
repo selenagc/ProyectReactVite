@@ -7,7 +7,6 @@ function Categorias() {
   const cargarCategorias = async () => {
     try {
       const data = await getAllCategorias();
-      console.log("Categorías obtenidas desde la API:", data); 
       setCategorias(data);
     } catch (error) {
       console.error("Error al cargar categorías:", error);
