@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllCategorias, createCategoria, showCategoria,updateCategoria } from "../services/categoria_service.jsx";
+import { getAllCategorias, createCategoria, showCategoria } from "../services/categoria_service.jsx";
+import { getAllCategorias, createCategoria } from "../services/categoria_service.jsx";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
@@ -49,9 +51,6 @@ function Categorias() {
     setNombre(cat.nombre);
     setDetalle(null);
   };
-
-
-
   return (
     <div className="container mt-3">
       <h2>Listado de Categorías</h2>
@@ -104,7 +103,6 @@ function Categorias() {
                   >
                     Editar
                   </button>
-
                 </td>
               </tr>
             ))}
