@@ -32,3 +32,11 @@ export const updateCategoria = async (id, nombre) => {
     });
     return await response.json();
 };
+
+export const destroyCategoria = async (id) => {
+    const response = await fetch(`${API_URL}/categorias/${id}`, {
+      method: "DELETE",
+      headers,
+    });
+    return await response.json();
+};
