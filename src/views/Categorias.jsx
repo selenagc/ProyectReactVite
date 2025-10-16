@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllCategorias, createCategoria, showCategoria } from "../services/categoria_service.jsx";
+import { getAllCategorias, createCategoria } from "../services/categoria_service.jsx";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
@@ -43,7 +44,6 @@ function Categorias() {
       console.error("Error al obtener detalle:", error);
     }
   };
-
   return (
     <div className="container mt-3">
       <h2>Listado de Categorías</h2>
