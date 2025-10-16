@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { getAllCategorias, createCategoria, showCategoria } from "../services/categoria_service.jsx";
 import { getAllCategorias, createCategoria } from "../services/categoria_service.jsx";
 
 function Categorias() {
   const [categorias, setCategorias] = useState([]);
   const [nombre, setNombre] = useState("");
+  const [detalle, setDetalle] = useState(null);
 
   const cargarCategorias = async () => {
     try {
@@ -33,10 +35,20 @@ function Categorias() {
     }
   };
 
+  const verDetalle = async (id) => {
+    try {
+      const data = await showCategoria(id);
+      console.log("Detalle recibido:", data);
+      setDetalle(data);
+    } catch (error) {
+      console.error("Error al obtener detalle:", error);
+    }
+  };
   return (
     <div className="container mt-3">
       <h2>Listado de Categorías</h2>
 
+      {}
       <div className="mb-3">
         <input
           type="text"
@@ -50,7 +62,7 @@ function Categorias() {
         </button>
       </div>
 
-
+      {}
       {categorias.length === 0 ? (
         <p>No hay categorías registradas.</p>
       ) : (
@@ -59,8 +71,9 @@ function Categorias() {
             <tr>
               <th>ID</th>
               <th>Nombre</th>
-              <th>Fecha de creación</th>
-              <th>Última actualización</th>
+              <th>Creación</th>
+              <th>Actualización</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -70,10 +83,29 @@ function Categorias() {
                 <td>{cat.nombre}</td>
                 <td>{new Date(cat.created_at).toLocaleString()}</td>
                 <td>{new Date(cat.updated_at).toLocaleString()}</td>
+                <td>
+                  <button
+                    className="btn btn-info btn-sm"
+                    onClick={() => verDetalle(cat.id)}
+                  >
+                    Ver
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+      )}
+
+      {}
+      {detalle && (
+        <div className="mt-3 p-3 border">
+          <h5>Detalle de la categoría:</h5>
+          <p><strong>ID:</strong> {detalle.id}</p>
+          <p><strong>Nombre:</strong> {detalle.nombre}</p>
+          <p><strong>Creada:</strong> {detalle.created_at}</p>
+          <p><strong>Actualizada:</strong> {detalle.updated_at}</p>
+        </div>
       )}
     </div>
   );
