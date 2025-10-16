@@ -19,6 +19,7 @@ export const createCategoria = async (nombre) => {
     });
     return await response.json();
 };
+
 export const showCategoria = async (id) => {
     const response = await fetch(`${API_URL}/categorias/${id}`, { headers });
     return await response.json();
