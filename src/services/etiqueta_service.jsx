@@ -7,26 +7,25 @@ const headers = {
   Authorization: `Bearer ${TOKEN}`
 };
 
-export const getAllCategorias = async () => {
-    const response = await fetch(`${API_URL}/categorias`, { method: "GET", headers });
+export const getAllEtiquetas = async () => {
+    const response = await fetch(`${API_URL}/etiquetas`, { method: "GET", headers });
     return await response.json();
 };
-export const createCategoria = async (nombre) => {
-    const response = await fetch(`${API_URL}/categorias`, {
+export const createEtiqueta = async (nombre) => {
+    const response = await fetch(`${API_URL}/etiquetas`, {
       method: "POST",
       headers,
       body: JSON.stringify({ nombre }),
     });
     return await response.json();
 };
-
-export const showCategoria = async (id) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, { headers });
+export const showEtiqueta = async (id) => {
+    const response = await fetch(`${API_URL}/etiquetas/${id}`, { headers });
     return await response.json();
 };
 
-export const updateCategoria = async (id, nombre) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, {
+export const updateEtiqueta = async (id, nombre) => {
+    const response = await fetch(`${API_URL}/etiquetas/${id}`, {
       method: "PUT",
       headers,
       body: JSON.stringify({ nombre }),
@@ -34,8 +33,8 @@ export const updateCategoria = async (id, nombre) => {
     return await response.json();
 };
 
-export const destroyCategoria = async (id) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, {
+export const destroyEtiqueta = async (id) => {
+    const response = await fetch(`${API_URL}/etiquetas/${id}`, {
       method: "DELETE",
       headers,
     });
