@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getAllCategorias, createCategoria, showCategoria,updateCategoria } from "../services/categoria_service.jsx";
 import { getAllCategorias, createCategoria, showCategoria } from "../services/categoria_service.jsx";
 import { getAllCategorias, createCategoria } from "../services/categoria_service.jsx";
 
@@ -6,6 +7,7 @@ function Categorias() {
   const [categorias, setCategorias] = useState([]);
   const [nombre, setNombre] = useState("");
   const [detalle, setDetalle] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   const cargarCategorias = async () => {
     try {
@@ -43,6 +45,11 @@ function Categorias() {
     } catch (error) {
       console.error("Error al obtener detalle:", error);
     }
+  };
+  const editarCategoria = (cat) => {
+    setEditingId(cat.id);
+    setNombre(cat.nombre);
+    setDetalle(null);
   };
   return (
     <div className="container mt-3">
@@ -89,6 +96,12 @@ function Categorias() {
                     onClick={() => verDetalle(cat.id)}
                   >
                     Ver
+                  </button>
+                  <button
+                    className="btn btn-warning btn-sm"
+                    onClick={() => editarCategoria(cat)}
+                  >
+                    Editar
                   </button>
                 </td>
               </tr>
