@@ -9,30 +9,32 @@ import Categorias from './views/Categorias.jsx';
 import DetalleCategoria from './views/DetalleCategoria.jsx';
 import Etiquetas from './views/Etiquetas.jsx';
 import DetalleEtiqueta from './views/DetalleEtiqueta.jsx';
+import Login from './views/Login.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 
 function App() {
   return (
     <Router>
       <div className="d-flex flex-column vh-100">
         <Header />
-
         <div className="flex-grow-1 p-3">
           <Routes>
-            <Route path="/tareas" element={<Tareas />} />
-            <Route path="/tarea/crear" element={<CrearTarea />} />
-            <Route path="/tarea/editar/:id" element={<EditarTarea />} />
-            <Route path="/tarea/:id" element={<DetalleTarea />} />
-            <Route path="/categorias" element={<Categorias />} />
-            <Route path="/categoria/:id" element={<DetalleCategoria />} />
-            <Route path="/etiquetas" element={<Etiquetas />} />
-            <Route path="/etiqueta/:id" element={<DetalleEtiqueta />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/tareas" element={<PrivateRoute element={<Tareas />} />} />
+            <Route path="/tarea/crear" element={<PrivateRoute element={<CrearTarea />} />} />
+            <Route path="/tarea/editar/:id" element={<PrivateRoute element={<EditarTarea />} />} />
+            <Route path="/tarea/:id" element={<PrivateRoute element={<DetalleTarea />} />} />
+            <Route path="/categorias" element={<PrivateRoute element={<Categorias />} />} />
+            <Route path="/categoria/:id" element={<PrivateRoute element={<DetalleCategoria />} />} />
+            <Route path="/etiquetas" element={<PrivateRoute element={<Etiquetas />} />} />
+            <Route path="/etiqueta/:id" element={<PrivateRoute element={<DetalleEtiqueta />} />} />
           </Routes>
         </div>
-
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
 export default App;
