@@ -13,7 +13,6 @@ function DetalleTarea() {
       try {
         setCargando(true);
         const tareaData = await showTarea(id);
-        console.log("Datos de la tarea:", tareaData);
         const etiquetas = (tareaData.data.etiquetas || []).map(tag => ({
           ...tag,
           id: Number(tag.id)

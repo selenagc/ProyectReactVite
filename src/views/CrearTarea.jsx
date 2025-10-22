@@ -6,11 +6,14 @@ import { getAllEtiquetas } from "../services/etiqueta_service";
 
 function CrearTarea() {
   const navigate = useNavigate();
-  const [titulo, setTitulo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [estado, setEstado] = useState("pendiente");
-  const [categoriaId, setCategoriaId] = useState("");
-  const [tagsSeleccionados, setTagsSeleccionados] = useState([]);
+  const [tarea, setTarea] = useState({
+    titulo: "",
+    descripcion: "",
+    estado: "pendiente",
+    categoria_id: "",
+    etiquetas: []
+  });
+
   const [categorias, setCategorias] = useState([]);
   const [tags, setTags] = useState([]);
 
@@ -24,107 +27,121 @@ function CrearTarea() {
     cargarDatos();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setTarea((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleCheckboxEstado = (e) => {
-    setEstado(e.target.checked ? "realizada" : "pendiente");
+    setTarea((prev) => ({
+      ...prev,
+      estado: e.target.checked ? "realizada" : "pendiente"
+    }));
   };
 
   const handleTagCheckbox = (tagId) => {
     const idNum = Number(tagId);
-    setTagsSeleccionados((prev) =>
-      prev.includes(idNum) ? prev.filter((id) => id !== idNum) : [...prev, idNum]
-    );
+    setTarea((prev) => ({
+      ...prev,
+      etiquetas: prev.etiquetas.includes(idNum)
+        ? prev.etiquetas.filter((id) => id !== idNum)
+        : [...prev.etiquetas, idNum]
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!titulo || !descripcion || !categoriaId) {
+    if (!tarea.titulo || !tarea.descripcion || !tarea.categoria_id) {
       alert("Por favor completa todos los campos obligatorios.");
       return;
     }
 
-    const nuevaTarea = {
-      titulo,
-      descripcion,
-      estado,
-      categoria_id: Number(categoriaId),
-      etiquetas: tagsSeleccionados
-    };
+    await createTarea({
+      ...tarea,
+      categoria_id: Number(tarea.categoria_id)
+    });
 
-      await createTarea(nuevaTarea);
-      setTitulo("");
-      setDescripcion("");
-      setEstado("pendiente");
-      setCategoriaId("");
-      setTagsSeleccionados([]);
-      navigate("/tareas");
+    setTarea({
+      titulo: "",
+      descripcion: "",
+      estado: "pendiente",
+      categoria_id: "",
+      etiquetas: []
+    });
+
+    navigate("/tareas");
   };
 
   return (
     <div className="container mt-3">
       <h2>Crear Nueva Tarea</h2>
       <form onSubmit={handleSubmit}>
-        {}
         <div className="mb-3">
           <label className="form-label">Título *</label>
           <input
             type="text"
+            name="titulo"
             className="form-control"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
+            value={tarea.titulo}
+            onChange={handleChange}
             placeholder="Ingrese el título de la tarea"
             required
           />
         </div>
 
-        {}
         <div className="mb-3">
           <label className="form-label">Descripción *</label>
           <textarea
+            name="descripcion"
             className="form-control"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
+            value={tarea.descripcion}
+            onChange={handleChange}
             placeholder="Describa la tarea"
             rows="3"
             required
           />
         </div>
 
-        {}
         <div className="form-check mb-3">
           <input
             type="checkbox"
             className="form-check-input"
-            checked={estado === "realizada"}
+            checked={tarea.estado === "realizada"}
             onChange={handleCheckboxEstado}
           />
           <label className="form-check-label ms-2">
-            {estado === "realizada" ? " Tarea Realizada" : "Tarea Pendiente"}
+            {tarea.estado === "realizada" ? "Tarea Realizada" : "Tarea Pendiente"}
           </label>
         </div>
 
-        {}
         <div className="mb-3">
-          <label className="form-label">Categoría</label>
+          <label className="form-label">Categoría *</label>
           <select
+            name="categoria_id"
             className="form-control"
-            value={categoriaId}
-            onChange={(e) => setCategoriaId(e.target.value)}
+            value={tarea.categoria_id}
+            onChange={handleChange}
             required
           >
             <option value="">Seleccione una categoría</option>
             {categorias.map((cat) => (
-              <option key={cat.id} value={String(cat.id)}>
+              <option key={cat.id} value={cat.id}>
                 {cat.nombre}
               </option>
             ))}
           </select>
         </div>
 
-        {}
         <div className="mb-3">
           <label className="form-label">Etiquetas</label>
-          <div className="border rounded p-3 bg-light" style={{ maxHeight: "250px", overflowY: "auto" }}>
+          <div
+            className="border rounded p-3 bg-light"
+            style={{ maxHeight: "250px", overflowY: "auto" }}
+          >
             {tags.length === 0 ? (
               <p className="text-muted mb-0">No hay etiquetas disponibles</p>
             ) : (
@@ -134,7 +151,7 @@ function CrearTarea() {
                     type="checkbox"
                     className="form-check-input"
                     id={`tag-${tag.id}`}
-                    checked={tagsSeleccionados.includes(Number(tag.id))}
+                    checked={tarea.etiquetas.includes(Number(tag.id))}
                     onChange={() => handleTagCheckbox(tag.id)}
                   />
                   <label className="form-check-label" htmlFor={`tag-${tag.id}`}>
@@ -146,8 +163,16 @@ function CrearTarea() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Crear Tarea</button>
-        <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate("/tareas")}>Cancelar</button>
+        <button type="submit" className="btn btn-primary">
+          Crear Tarea
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary ms-2"
+          onClick={() => navigate("/tareas")}
+        >
+          Cancelar
+        </button>
       </form>
     </div>
   );
