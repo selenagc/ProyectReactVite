@@ -31,14 +31,15 @@ function Tareas() {
       categoria_id: tarea.categoria?.id || null,
       tags: (tarea.etiquetas || []).map(tag => Number(tag.id))
     };
-      await updateTarea(tarea.id, tareaActualizada);
-      setTareas(prevTareas => 
-        prevTareas.map(t => 
-          t.id === tarea.id 
-            ? { ...t, estado: nuevoEstado }
-            : t
-        )
-      );
+
+    await updateTarea(tarea.id, tareaActualizada);
+    setTareas(prevTareas => 
+      prevTareas.map(t => 
+        t.id === tarea.id 
+          ? { ...t, estado: nuevoEstado }
+          : t
+      )
+    );
   };
 
   return (
@@ -97,7 +98,8 @@ function Tareas() {
                 <td>
                   <Link to={`/tarea/${tarea.id}`} className="btn btn-info btn-sm me-2">Ver</Link>
                   <Link to={`/tarea/editar/${tarea.id}`} className="btn btn-warning btn-sm me-2">Editar</Link>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(tarea.id)}>Eliminar</button>
+
+                  <button   className="btn btn-danger btn-sm"   onClick={() => handleEliminar(tarea.id)}>  Eliminar</button>
                 </td>
               </tr>
             ))}
