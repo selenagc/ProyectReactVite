@@ -1,64 +1,53 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-//import './Login.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services/AuthService";
+import "./Login.css";
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      
-      const data = await response.json();
+    setError("");
 
-      if (response.ok) {
-        localStorage.setItem('authToken', data.token);
-        navigate('/tareas');
-      } else {
-        setError('Usuario o contraseña incorrectos');
-      }
-    } catch (error) {
-      setError('Error al iniciar sesión');
+    try {
+      await AuthService.login(email, password);
+      navigate("/tareas");
+
+    } catch (err) {
+      setError(err.message || "Error al iniciar sesión");
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Correo electrónico</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p>{error}</p>}
+        <label>Correo electrónico</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="ejemplo@correo.com"
+          required
+        />
+
+        <label>Contraseña</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Contraseña"
+          required
+        />
+
+        {error && <p className="error">{error}</p>}
+
         <button type="submit">Iniciar sesión</button>
       </form>
     </div>
   );
-};
-
-export default Login;
+}
