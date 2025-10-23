@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../services/AuthService";
-import "./Login.css";
+import '../App.css';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,7 +16,6 @@ export default function Login() {
     try {
       await AuthService.login(email, password);
       navigate("/tareas");
-
     } catch (err) {
       setError(err.message || "Error al iniciar sesión");
     }

@@ -11,6 +11,7 @@ import DetalleEtiqueta from './views/DetalleEtiqueta.jsx';
 import Login from './views/Login.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
+import './App.css';
 
 function App() {
   localStorage.clear();
@@ -31,7 +32,6 @@ function App() {
             <PrivateRoute>
               <Layout>
                 <Routes>
-                  
                   <Route path="/tareas" element={<Tareas />} />
                   <Route path="/tarea/crear" element={<CrearTarea />} />
                   <Route path="/tarea/editar/:id" element={<EditarTarea />} />
@@ -47,7 +47,6 @@ function App() {
           } 
         />
         <Route path="*" element={<Navigate to="/login" replace />} />
-
       </Routes>
     </Router>
   );
