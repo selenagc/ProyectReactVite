@@ -1,43 +1,29 @@
-const API_URL = "http://127.0.0.1:8000/api";
-const TOKEN = "3|IkiRqBtwlDQdE2KK3lHcO4w4EPP4bmFe404fYviK7b4a3fcc";
-
-const headers = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  Authorization: `Bearer ${TOKEN}`
-};
+import apiFetch from "./apiFetch";
 
 export const getAllCategorias = async () => {
-    const response = await fetch(`${API_URL}/categorias`, { method: "GET", headers });
-    return await response.json();
+  return await apiFetch("categorias");
 };
+
 export const createCategoria = async (nombre) => {
-    const response = await fetch(`${API_URL}/categorias`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ nombre }),
-    });
-    return await response.json();
+  return await apiFetch("categorias", {
+    method: "POST",
+    body: { nombre },
+  });
 };
 
 export const showCategoria = async (id) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, { headers });
-    return await response.json();
+  return await apiFetch(`categorias/${id}`);
 };
 
 export const updateCategoria = async (id, nombre) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify({ nombre }),
-    });
-    return await response.json();
+  return await apiFetch(`categorias/${id}`, {
+    method: "PUT",
+    body: { nombre },
+  });
 };
 
 export const destroyCategoria = async (id) => {
-    const response = await fetch(`${API_URL}/categorias/${id}`, {
-      method: "DELETE",
-      headers,
-    });
-    return await response.json();
+  return await apiFetch(`categorias/${id}`, {
+    method: "DELETE",
+  });
 };
